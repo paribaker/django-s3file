@@ -57,4 +57,6 @@ storage = default_storage if not local_dev else S3MockStorage()
 
 
 def get_aws_location():
-    return storage.location or getattr(settings, "AWS_LOCATION", "")
+    # HACK: we should be getting the value from the storage class instead of just the AWS_LOCATION
+    # this is important for apps using s3 for staticfile storage as well. 
+    return getattr(settings, "PRIVATE_MEDIAFILES_LOCATION") or getattr(settings, "AWS_LOCATION", "")
